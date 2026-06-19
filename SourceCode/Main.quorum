@@ -49,6 +49,7 @@ class Main is Game, KeyboardListener
         DesktopConfiguration config = GetDesktopConfiguration()
         config:width = 2000
         config:height = 1500
+        UseVulkan(true)
         StartGame()
     end
     
@@ -60,8 +61,6 @@ class Main is Game, KeyboardListener
         ProcessAnimations(cesium)
         
         ModelBlueprintVulkan blue = cast(ModelBlueprintVulkan, cesium:GetModelBlueprint())
-        cesium:Rotate(1,0,0,90)
-        cesium:Rotate(0,0,1,90)
         cesium:SetFocusable(true)
         
         //for an Experiment, use the 2-dummy trick
@@ -141,11 +140,26 @@ have a name, which will be put in the model's description if the animation is ac
     action ReleasedKey(KeyboardEvent event)
         if event:keyCode = event:SPACE
             cesium:Focus()
+            if not cesium:IsAnimating()
             AnimationState state
+            state:SetEndBehavior(state:LOOP_ON_COMPLETE)
             state:SetStarted(true)
             cesium:SetAnimationState(state)
+            else
+                cesium:StopAnimation()
+            end
         elseif event:keyCode = event:TAB
             SetToNextDummy()
+            elseif event:keyCode = event:UP
+            if cesium:IsAnimating()
+                AnimationState state = cesium:GetAnimationState()
+                state:SetAnimationSpeed(state:GetAnimationSpeed() * 1.5)
+            end
+            elseif event:keyCode = event:DOWN
+            if cesium:IsAnimating()
+                AnimationState state = cesium:GetAnimationState()
+                state:SetAnimationSpeed(state:GetAnimationSpeed() / 1.5)
+            end
         elseif event:keyCode = event:ENTER
             if cesium:IsFocused()
                 channelIndex = 0
