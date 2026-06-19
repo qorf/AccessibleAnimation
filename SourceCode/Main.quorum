@@ -154,11 +154,15 @@ have a name, which will be put in the model's description if the animation is ac
             if cesium:IsAnimating()
                 AnimationState state = cesium:GetAnimationState()
                 state:SetAnimationSpeed(state:GetAnimationSpeed() * 1.5)
+                state:SetAnimationStateLabel("" + state:GetAnimationSpeed() + "x")
+                state:SetLabelChange(true)
             end
             elseif event:keyCode = event:DOWN
             if cesium:IsAnimating()
                 AnimationState state = cesium:GetAnimationState()
                 state:SetAnimationSpeed(state:GetAnimationSpeed() / 1.5)
+                state:SetAnimationStateLabel("" + state:GetAnimationSpeed() + "x")
+                state:SetLabelChange(true)
             end
         elseif event:keyCode = event:ENTER
             if cesium:IsFocused()
@@ -186,11 +190,9 @@ that could be used to generate frames. They could be used in many ways.
         if dummy1:IsFocused()
             dummy2:SetName(name)
             dummy2:Focus()
-            output dummy2:GetName()
         else
             dummy1:SetName(name)
             dummy1:Focus()
-            output dummy1:GetName()
         end
         channelIndex = channelIndex + 1
         if channelIndex >= channels:GetSize()
